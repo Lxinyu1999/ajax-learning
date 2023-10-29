@@ -11,10 +11,10 @@ Thanks to
 - Front-end web page: html, css
 - ajax: XMLHttpRequest, Axios
   
-  ![Alt text](image.png)
+  ![Alt text](readme_img/image.png)
 
 ## axios
-![Alt text](image2.png)
+![Alt text](readme_img/image2.png)
 
 ## express
 ![Alt text](readme_img/image3.png)
