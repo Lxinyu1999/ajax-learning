@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axios发送请求</title>
+</head>
+<body>
+    <button>GET</button>
+    <button>POST</button>
+    <button>AJAX</button>
+
+    <!-- 加载axios，注意这一步和下面的js代码块要分开。
+        前面的crossorigin是防止报错
+        这里通过cdn链接来载入axios模块 -->
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        /* 浏览器无法使用require，这是node.js独有的，逆天
+           因此我们只能通过cdn链接的方式导入了
+        */
+        // const axios = require('axios');
+        const btns = document.querySelectorAll('button');
+        
+        // 配置baseURL
+        axios.defaults.baseURL = 'http://127.0.0.1:8000'
+
+        // 发送GET请求
+        btns[0].onclick = function(){
+            axios.get('/axios-server',{
+                // url参数
+                params:{
+                    id:100,
+                    vip:8
+                },
+                // 请求头信息，据说大写H就不会有跨域的报错问题
+                // （不过我们在server已经设置了acess-control）
+                Headers:{
+                    // 注意这里不能使用中文！
+                    name:"ritiange",
+                    age:24,
+                }
+                // 上面是一个异步函数（因为你申请请求，等待response是要时间的
+                // js主线程不会去等你，它会继续向下执行。这里的then是当
+                // 请求完毕时回到主线程要做的事情
+            }).then( value =>{ //当执行成功，value就是响应体解析之后的结果，这个是axios自带的。
+                console.log(value) //
+            })
+        }
+
+
+        // 发送POST请求
+        btns[1].addEventListener('click',function(){
+            // axios.post(url,data,config)
+            
+            axios.post(
+            // url
+            '/axios-server',
+
+            // data
+           {
+                id:100,
+                vip:8
+            },
+
+            // config
+            {
+                // url可以设置，但是一般name=value不放在post里面，这里只是展示一下
+                params:{
+                    name:'ritiange'
+                },
+                // headers
+                Headers:{
+                    height:180,
+                    weight:180
+                }
+            }
+            )
+        })
+
+
+        // axios发送ajax通用方法
+        btns[2].onclick = function(){
+            axios({
+
+                // 请求方法
+                method:'POST', // 默认是GET
+
+                // url
+                url:'/axios-server',
+                // 参数
+                params:{
+                    vip:10,
+                    level:30
+                },
+                // 头信息
+                headers:{
+                    a:100,
+                    b:200
+                },
+                // 请求头参数
+                data:{
+                    usernmae:'admin',
+                    password:'123'
+                }
+                // 处理响应体
+            }).then(response=>{
+                console.log(response) // 响应的所有信息
+                console.log(response.status) // 响应状态码，200
+                console.log(response.statusText) // 响应状态字符串，OK
+                console.log(response.headers) // 响应头信息：content-length: "35"，content-type:"text/html; charset=utf-8"
+                console.log(response.data) // 响应体 {name: '日天哥', tool: 'axios'}
+            })
+        }
+
+
+    </script>
+</body>
+</html>

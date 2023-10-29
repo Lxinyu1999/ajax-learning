@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同源策略</title>
+</head>
+<body>
+    <h1>日天哥</h1>
+    <button>点击获取用户数据</button>
+    <script>
+        const btn = document.querySelector('button');
+
+        btn.addEventListener('click',function(){
+            const x = new XMLHttpRequest()
+            // 因为是满足同源策略的，url可简写
+            x.open("GET",'/data')
+            x.send()
+            x.onreadystatechange = ()=>{
+                if(x.readyState ===4 && x.status==200){
+                    console.log(x.response)
+                }
+            }
+        
+        })
+    </script>
+</body>
+</html>

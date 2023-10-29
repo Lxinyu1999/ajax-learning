@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IE缓存问题</title>
+    <style>
+        div{
+            width:200px;
+            height:100px;
+            border: solid 1px rgb(165, 216, 25);
+        }
+    </style>
+</head>
+
+<body>
+    <button>点击发送请求</button>
+    <div></div>    
+    <script>
+        const btn = document.getElementsByTagName('button')[0];
+        const result = document.querySelector('div');
+
+        btn.addEventListener('click',function(){
+            const xhr = new XMLHttpRequest();
+            // 这样的话ie缓存会导致一直输出缓存中的内容，server更新也无济于事
+            //  xhr.open("GET","http://localhost:8000/ie");
+
+            // 获取当前的时间戳，放到t=value的value赋值为上
+            // 这样ie就会认为这是两次相同的请求，从而避免走本地缓存
+            xhr.open("GET","http://localhost:8000/ie?t="+Date.now())
+            xhr.send()
+            xhr.onreadystatechange = ()=>{
+                if(xhr.readyState==4 && xhr.status>=200 && xhr.status<300){
+                    result.innerHTML = xhr.response
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>

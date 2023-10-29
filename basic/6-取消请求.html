@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手动取消请求</title>
+</head>
+<body>
+    <button>发送请求</button>
+    <button>取消请求</button>
+    <script>
+        /* 刚才我们是超时让ontimeOut自动取消，现在我们来手动取消请求 */
+        const btn1 = document.getElementsByTagName('button')[0];
+        const btn2 = document.getElementsByTagName('button')[1];
+
+        // 当你在一个外部作用域（如全局作用域或外围函数的作用域）中声明一个变量时，
+        // 这个变量可以在任何嵌套的内部作用域（如函数或块作用域）中被访问和修改
+        let xhr = null;
+
+        // 发送请求
+        btn1.addEventListener('click',()=>{
+            xhr = new XMLHttpRequest();
+
+            xhr.open("GET","http://localhost:8000/delay")
+            xhr.send()
+            // xhr.onreadystatechange = ()=>{
+            //     if(xhr.readyState==4 && xhr.status>=200 && xhr.status<300){
+            //         console.log('')
+            //     }
+            // }
+        })
+
+        // 取消请求
+        btn2.onclick = function(){
+            xhr.abort()
+        }
+    </script>
+</body>
+</html>

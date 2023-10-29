@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX GET 请求</title>
+
+    <style>
+        #result{
+            width: 200px;
+            height: 100px;
+            border: solid 1px #90b;
+        }
+    </style>
+
+</head>
+
+
+<body>
+    <button>点击发送请求</button>
+    <div id="result"></div>
+
+
+    <script>
+        // 绑定click事件
+        document.querySelector('button').onclick=()=>{
+            /* 接下来是ajax四部曲，步骤是固定的 */
+            // 1. 定义xhr对象
+            const xhr = new XMLHttpRequest();
+
+            // 2. 初始化，发送请求时，需要调用自带的函数open() 
+            // open(method,url)表示发送方式（GET，POST..）以及发送给谁url
+            // xhr.open('GET','http://localhost:8000/server') // 注意，http不能省略！
+            
+            // 在Ajax当中如何设置参数？很简单，遵从 name=value 的形式，在链接最后面用问号 '?' 分割，多个参数之间用 '&' 连接
+            xhr.open('GET','http://localhost:8000/server?a=100&b=200&c=300')
+
+
+            // 3. 使用send()函数将请求发送给服务器
+            xhr.send()
+
+            // 4. 事件绑定：处理服务器给你返回的结果
+            // 该事件句柄表示：当xhr的ready state发生change时的操作，ready state表示我们刚才的xhr发送请求的结果（共有0-4五种情况，0是未初始化，1是open已调用
+            // 2是send已发送，3是部分加载，4表示请求完成）
+            xhr.onreadystatechange = ()=>{  // 因为要改变4次，所以onchange就会触发四次，但是我们只需用状态4
+                // 判定响应状态码，有说法是成功的状态是200-300之间，如果后续报错就修改此处
+                if(xhr.readyState==4 && xhr.status==200){ // 另外额外检验一步：拿到正确的响应码200.因为即便返回成功，也不一定服务器内容是对的，有可能返回404
+                    // 5. 处理服务端返回的响应结果
+                    // 前面说过，返回的内容包括行、头、空行、体。
+
+                    // ① 输出响应行，它包括三段：协议版本 状态码 状态字符串；例如 HTTP1.1 200 OK
+                    // 我们只需用后面两个，第一个版本就不要了
+                    console.log(xhr.status) // 就是我们刚才的那个状态码
+                    console.log(xhr.statusText) // 状态字符串
+
+                    // ② 输出响应头：包括一大串信息，比如content-type, length，encoding格式等等
+                    console.log(xhr.getAllResponseHeaders()) // 获取所有响应头
+
+                    // ③ 输出响应体，也就是我们的response
+                    console.log(xhr.response) // 这个是最重要的！！！！
+
+                    /* 在server.js当中，返回给我们的响应体如下：
+                    response.send("Hello Ajax!") */
+
+                    
+                    // 发送完毕后，我们得到了响应体，把响应体的内容放在div里面即可
+                    document.querySelector('div').innerHTML = xhr.response; 
+                    // 注意要放到请求if分支里面，因为js是单线程，你放外面它可不会等用户按按钮才执行，瞬间就已经执行了，没有任何结果
+                    
+                }
+        }
+
+    }
+
+    </script>
+</body>
+</html>

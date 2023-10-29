@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重复请求问题</title>
+</head>
+<body>
+    <button>发送请求</button>
+    <script>
+
+        const btn = document.querySelectorAll('button')[0];
+
+        let xhr = null;
+        let isSending = false; // 如果正在发送，则为true
+
+
+        /* 
+            这段代码的逻辑是：如果当前请求正在发送中（isSending为true）
+            则取消当前发送中的请求，重新发送一个请求
+            如果加了return，那么它会终止当前发送的请求（当然也没有新的请求发送）
+        */
+
+        // 发送请求
+        btn.addEventListener('click',()=>{
+            // 首先判断是否正在发送，如果发送，就取消请求
+            if(isSending){
+                xhr.abort();
+                // return;
+            }   
+
+            xhr = new XMLHttpRequest();
+            isSending = true;
+            xhr.open("GET","http://localhost:8000/delay")
+            xhr.send()
+            xhr.onreadystatechange = ()=>{
+                if(xhr.readyState==4){
+                    isSending = false // 发送-接收完毕以后，修改回false
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>

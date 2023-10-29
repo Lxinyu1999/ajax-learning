@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORS运行跨域</title>
+    <style>
+        div{
+            width:200px;
+            height: 100px;
+            border: solid 1px  #78a;
+        }
+    </style>
+</head>
+<body>
+    <button>CORS请求</button>
+    <div></div>
+    <script>
+        document.querySelector('button').onclick = function(){
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET","http://localhost:9000/cors");
+            xhr.send()
+            xhr.onreadystatechange = ()=>{
+                if(xhr.readyState==4 && xhr.status==200){
+                    document.querySelector('div').innerHTML = xhr.response;
+                }
+            }
+        }
+
+
+    </script>
+</body>
+</html>

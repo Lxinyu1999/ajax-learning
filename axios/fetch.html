@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fetch请求ajax</title>
+</head>
+<body>
+    <button>ajax请求</button>
+    <script>
+
+        /**
+         * fetch 是一个现代的网络请求API，它提供了一个更为简洁和功能强大的方式来处理HTTP请求和响应。
+         * 它是一个原生的JavaScript函数，可以用于在网络上请求资源。fetch API是一个替代XMLHttpRequest的更现代、更灵活的解决方案。
+         * 它返回一个Promise，
+        */
+
+        const btn = document.querySelector('button');
+
+        btn.addEventListener('click',()=>{
+            // fetch(url, options)
+            fetch('http://localhost:8000/fetch-server',{
+                // 内置参数（按api来）
+
+                // 请求方法
+                method:'POST',
+                // 请求头
+                headers:{
+                    name:'ritiange'
+                },
+                // 请求体
+                body:'username=tom&password=123',
+            
+            // 处理响应成功的数据体，和之前axios的一样，也是promise
+            }).then(response=>{
+                // 但是有一个问题，那就是fetch不会自动转换json
+                return response.json() //因此我们要手动转化之
+            }).then(response=>{
+                console.log(response);
+            })
+                    
+        })
+
+    </script>
+</body>
+</html>
